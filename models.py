@@ -24,22 +24,6 @@ base = declarative_base()
 
 
 # Create the models
-class Plant(base):
-    __tablename__ = "plants"
-    plant_id = Column(Integer, primary_key=True)
-    plant_name = Column(String)
-    plant_variety = Column(String)
-    planting_date = Column(String)  # Change this to date format
-    field_planted = Column(Integer, foreign_key="fields.field_id")
-    plant_yield = Column(Integer)
-    comments = Column(String)
-
-    def __repr__(self):
-        return f"""<Plant(plant_id={self.plant_id}, plant_name={self.plant_name}, 
-        plant_variety={self.plant_variety}, planting_date={self.planting_date}, 
-        plant_yield={self.plant_yield}, comments={self.comments})>"""
-
-
 class Field(base):
     __tablename__ = "fields"
     field_id = Column(Integer, primary_key=True)
@@ -47,16 +31,34 @@ class Field(base):
     field_size = Column(Integer)
     field_owner = Column(String)
     field_plants = Column(Integer)
+    ph_results = Column(Integer)
     field_comments = Column(String)
 
     def __repr__(self):
         return f"""<Field(field_id={self.field_id}, field_name={self.field_name},
         field_size={self.field_size}, field_owner={self.field_owner},
-        field_plants={self.field_plants}, field_comments={self.field_comments})>"""
+        field_plants={self.field_plants}, ph_results={self.field_name}, 
+        field_comments={self.field_comments})>"""
 
-    field_plants = relationship(
-        "Plant", backref="field"
-    )  # Many plants can belong to one field
+
+# field_plants = relationship("Plant", backref="field")
+# Many plants can belong to one field
+
+
+class Plant(base):
+    __tablename__ = "plants"
+    plant_id = Column(Integer, primary_key=True)
+    plant_name = Column(String)
+    plant_variety = Column(String)
+    planting_date = Column(String)  # Change this to date format
+    # field_planted = Column(Integer)
+    plant_yield = Column(Integer)
+    comments = Column(String)
+
+    def __repr__(self):
+        return f"""<Plant(plant_id={self.plant_id}, plant_name={self.plant_name},
+        plant_variety={self.plant_variety}, planting_date={self.planting_date},
+        plant_yield={self.plant_yield}, comments={self.comments})>"""
 
 
 class Inventory(base):
@@ -76,7 +78,7 @@ class Inventory(base):
 class Sales(base):
     __tablename__ = "sales"
     sale_id = Column(Integer, primary_key=True)
-    customer_name = Column(String, foreign_key="customers.customer_name")
+    customer_name = Column(String)
     sale_date = Column(String)  # Change this to date format
     sale_item = Column(String)
     sale_quantity = Column(Integer)
